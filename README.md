@@ -1,8 +1,13 @@
 # Monolito Asp.NET Core MVC
 
-App responsivo criado em Asp.NET Core MVC com um belo design de formulários.
+Um monolito com cara de DDD. 
 
-Uso de Repository Pattern e AutoMapper para mapeamento entre Models e ViewModels (modelo limpo).
+Modelo de domínio separado de modelo de apresentação. 
+
+Services, Resository, Validações de Domínio, AutoMapper, etc.
+
+#### Flunt
+Validações de domínio com [Flunt](https://github.com/andrebaltieri/flunt) Validations.
 
 ### Autenticação 
 Identity Core
@@ -14,14 +19,11 @@ Entity Framework
 Dapper
 
 ### Formulários
+Bootstrap
 
-Adotamos dois modelos de formulário. Conforme descrevemos a seguir:
+### Validação no Cliente
+Além da validação de Domínio, aplicamos também validação rápida ainda no clinte, utilizando todo o poder das DataAnnotations e ModalState.
 
-#### Na entidade Produto 
-Os formulários são feitos em Modal Bootstrap. Toda a dinâmica do JavaScript sendo utilizada nas validações.
-  
-#### Na entidade Cliente 
-Utilizamos formulários convencionais, e aproveitamos todo o poder de validações do Asp.NET Core, com DataAnnotations e ModalState.
 
 ![alt text](src/Projeto/wwwroot/images/01.jpg?raw=true=250x250 "Title")
 
