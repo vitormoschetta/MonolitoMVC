@@ -13,36 +13,42 @@ using Projeto.Util;
 using System;
 using Projeto.Repository;
 using Projeto.ViewModels;
+using Projeto.Services;
 
 namespace Projeto.Controllers
 {
     public class ClienteController : Controller
     {
-        private readonly ClienteRepository _repository;
-        public ClienteController(ClienteRepository repository)
+        private readonly ClienteService _service;
+        public ClienteController(ClienteService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
-        public async Task<IActionResult> Index(int? pageNumber)
+        public IActionResult Index(int? pageNumber)
         {
             if (pageNumber == null) pageNumber = 1;
-            var listaModelo = await _repository.BuscarTodos(pageNumber);
-            return View(listaModelo);
+            var lista = _service.GetAll(pageNumber);
+            return View(lista);
         }
 
 
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClienteViewModel viewModel)
+        public IActionResult Create(ClienteViewModel viewModel)
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var resultado = await _repository.Cadastrar(viewModel);
-            if (resultado.Sucesso == false)
+            var result = _service.Create(viewModel);
+            if (result.Success == false)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
+                var notifications = result.Message;
+                foreach (var item in result.Data)
+                {
+                    notifications += $"{item.Message}. ";
+                }
+                ModelState.AddModelError(string.Empty, notifications);
                 return View(viewModel);
             }
             return RedirectToAction("Index");
@@ -50,75 +56,68 @@ namespace Projeto.Controllers
 
 
 
-        public async Task<IActionResult> Edit(Guid id)
+        public IActionResult Edit(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
+            var viewModel = _service.GetById(id);
             return View(viewModel);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ClienteViewModel viewModel)
+        public IActionResult Edit(ClienteViewModel viewModel)
         {
-            if (id != viewModel.Id)
+            if (!ModelState.IsValid) return View(viewModel);
+
+            var result = _service.Create(viewModel);
+            if (result.Success == false)
             {
-                ModelState.AddModelError(string.Empty, "Identificador inválido.");
+                var notifications = result.Message;
+                foreach (var item in result.Data)
+                {
+                    notifications += $"{item.Message}. ";
+                }
+                ModelState.AddModelError(string.Empty, notifications);
                 return View(viewModel);
             }
-
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Modelo inválido.");
-                return View(viewModel);
-            }
-
-            var resultado = await _repository.Atualizar(viewModel);
-            if (resultado.Sucesso == false)
-            {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
-                return View(viewModel);
-            }
-
             return RedirectToAction("Index");
         }
 
 
 
 
-        public async Task<IActionResult> Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
+            var viewModel = _service.GetById(id);
             return View(viewModel);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirm(Guid id)
+        public IActionResult DeleteConfirm(ClienteViewModel cliente)
         {
-            var resultado = await _repository.Excluir(id);
-
-            if (resultado.Sucesso != true)
+            var commandResult = _service.Delete(cliente.Id);
+            if (commandResult.Success == false)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
-                return View();
+                ModelState.AddModelError(string.Empty, commandResult.Message);
+                return View(cliente);
             }
 
             return RedirectToAction("Index");
         }
 
 
-        public async Task<IActionResult> Paginacao(int? pageNumber)
+        public IActionResult Paginacao(int? pageNumber)
         {
             if (pageNumber == null) pageNumber = 1;
-            var listaModelo = await _repository.BuscarTodos(pageNumber);
-            return PartialView("_TabelaIndex", listaModelo);
+            var lista = _service.GetAll(pageNumber);
+            return PartialView("_TabelaIndex", lista);
         }
 
 
 
-        public async Task<IActionResult> Search(int? pageNumber, string parametro)
+        public IActionResult Search(int? pageNumber, string parametro)
         {
-            var listaModelo = await _repository.Procurar(pageNumber, parametro);
+            var listaModelo = _service.Search(pageNumber, parametro);
             return PartialView("_TabelaIndex", listaModelo);
         }
 

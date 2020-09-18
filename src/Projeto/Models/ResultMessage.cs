@@ -1,13 +1,21 @@
+using System.Collections.Generic;
+using Flunt.Notifications;
+
 namespace Projeto.Models
 {
     public class ResultMessage
     {
-        public ResultMessage(bool sucesso, string mensagem)
+        public ResultMessage() { }
+
+        public ResultMessage(bool success, string message, IReadOnlyCollection<Notification> data, object Object)
         {
-            Sucesso = sucesso;
-            Mensagem = mensagem;
+            Success = success;
+            Message = message;
+            Data = data;
         }
-        public bool Sucesso { get; set; }
-        public string Mensagem { get; set; }
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public IReadOnlyCollection<Notification> Data { get; set; } // Retornar uma lista com notificações
+        public object Object { get; set; } // Retorna o objeto cadastrado, atualizado ou excluído.
     }
 }

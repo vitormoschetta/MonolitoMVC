@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,100 +15,53 @@ namespace Projeto.Repository
     public class ClienteRepository : IClienteRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        public ClienteRepository(ApplicationDbContext context, IMapper mapper)
+        public ClienteRepository(ApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-
-        public async Task<ResultMessage> Cadastrar(ClienteViewModel viewModel)
+        public void Create(Cliente cliente)
         {
-            var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Nome == viewModel.Nome || x.Cpf == viewModel.Cpf);
-            if (existe != null) return new ResultMessage(false, "Já existe um cadastro com estes parâmetros.");
-
-            try
-            {
-                var modelo = _mapper.Map<Cliente>(viewModel);
-
-                _context.Add(modelo);
-                await _context.SaveChangesAsync();
-                return new ResultMessage(true, string.Empty);
-            }
-            catch (Exception e)
-            {
-                return new ResultMessage(false, e.ToString());
-            }
-
+            _context.Add(cliente);
+            _context.SaveChanges();
         }
 
-
-        public async Task<ClienteViewModel> BuscarPorId(Guid id)
+        public IEnumerable<Cliente> GetAll()
         {
-            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            return _mapper.Map<ClienteViewModel>(modelo);
+            return _context.Cliente.ToList();
         }
 
-        public async Task<ResultMessage> Atualizar(ClienteViewModel viewModel)
+        public Cliente GetById(Guid id)
         {
-            try
-            {
-                var modelo = _mapper.Map<Cliente>(viewModel);
-
-                _context.Update(modelo);
-                await _context.SaveChangesAsync();
-                return new ResultMessage(true, string.Empty);
-            }
-            catch (Exception e)
-            {
-                return new ResultMessage(false, e.ToString());
-            }
+            return _context.Cliente.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<ResultMessage> Excluir(Guid id)
+        public void Update(Cliente cliente)
         {
-            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            try
-            {
-                _context.Remove(modelo);
-                await _context.SaveChangesAsync();
-                return new ResultMessage(true, string.Empty);
-            }
-            catch (Exception e)
-            {
-                return new ResultMessage(false, e.ToString());
-            }
+            _context.Update(cliente);
+            _context.SaveChanges();
         }
 
-
-        public async Task<PaginatedList<Cliente>> BuscarTodos(int? pageNumber)
+        public void Delete(Guid id)
         {
-            var listaModelo = await _context.Cliente.ToListAsync();
-            int pageSize = 5; // itens por página / paginação
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return ModelComPaginacao;
+            var cliente = _context.Cliente.FirstOrDefault(x => x.Id == id);
+            _context.Remove(cliente);
+            _context.SaveChanges();
         }
 
-
-        public async Task<PaginatedList<Cliente>> Procurar(int? pageNumber, string parametro)
+        public bool CpfExists(string cpf)
         {
-            var query = "select * from Cliente where nome like '%" + parametro + "%' ";
-            query += " or cpf like '%" + parametro + "%' ";
-            var listaModelo = await _context.Cliente.FromSqlRaw(query).ToListAsync();
-            int pageSize = 5;
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return ModelComPaginacao;
+            var cliente = _context.Cliente.FirstOrDefault(x => x.Cpf == cpf);
+            if (cliente != null) return true;
+            return false;
         }
 
-        private bool Exist(Guid id)
+        public IEnumerable<Cliente> Search(int? pageNumber, string parametro)
         {
-            return _context.Cliente.Any(x => x.Id == id);
-        }
-
-        bool IClienteRepository.Exist(Guid id)
-        {
-            throw new NotImplementedException();
+            var query = $"select * from Cliente where nome like '%{parametro}%' ";
+            query += $" or cpf like '%{parametro}%' ";
+            query += $" or datanascimento like '%{parametro}%' ";
+            return _context.Cliente.FromSqlRaw(query).ToList();
         }
     }
 }

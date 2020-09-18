@@ -1,26 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Projeto.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Projeto.Repository;
 using Projeto.ViewModels;
 using AutoMapper;
+using Projeto.Services;
+using Projeto.Repository.Interfaces;
 
 namespace Projeto
 {
@@ -33,11 +25,16 @@ namespace Projeto
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Sql Server
+            // services.AddDbContext<ApplicationDbContext>(options =>
+            //      options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // SqLite
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                  options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
 
             services.AddIdentity<Usuario, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddDefaultTokenProviders()
@@ -48,8 +45,8 @@ namespace Projeto
 
             services.AddRazorPages();
 
-            services.AddScoped<ProdutoRepository>();
-            services.AddScoped<ClienteRepository>();
+            services.AddTransient<IClienteRepository, ClienteRepository>();
+            services.AddScoped<ClienteService>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -85,8 +82,6 @@ namespace Projeto
             // AutoMapper
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProdutoViewModel, Produto>();
-                cfg.CreateMap<Produto, ProdutoViewModel>();
                 cfg.CreateMap<ClienteViewModel, Cliente>();
                 cfg.CreateMap<Cliente, ClienteViewModel>();
             });

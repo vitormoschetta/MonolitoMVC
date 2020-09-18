@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Projeto.Models;
 using Projeto.Util;
@@ -8,18 +9,13 @@ namespace Projeto.Repository.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<ResultMessage> Cadastrar(ClienteViewModel viewModel);
+        void Create(Cliente cliente);
+        void Update(Cliente cliente);
+        void Delete(Guid id);
+        Cliente GetById(Guid id);
+        IEnumerable<Cliente> GetAll();
+        bool CpfExists(string cpf);
+        IEnumerable<Cliente> Search(int? pageNumber, string parametro);
 
-        Task<ClienteViewModel> BuscarPorId(Guid id);
-
-        Task<ResultMessage> Atualizar(ClienteViewModel viewModel);
-
-        Task<ResultMessage> Excluir(Guid id);
-
-        Task<PaginatedList<Cliente>> BuscarTodos(int? pageNumber);
-
-        Task<PaginatedList<Cliente>> Procurar(int? pageNumber, string parametro);
-
-        bool Exist(Guid id);
     }
 }
