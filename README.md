@@ -1,10 +1,10 @@
 # Monolito Asp.NET Core MVC
 
-Um monolito com cara de DDD. 
+Um monolito com práticas SOLID e cara de DDD. 
 
 Modelo de domínio separado de modelo de apresentação. 
 
-Services, Resository, Validações de Domínio, Testes de unidade, AutoMapper, etc..
+Services, Resository, Validações de Domínio, Testes de unidade, AutoMapper, etc.
 
 #### Flunt
 Validações de domínio com [Flunt](https://github.com/andrebaltieri/flunt) Validations.
