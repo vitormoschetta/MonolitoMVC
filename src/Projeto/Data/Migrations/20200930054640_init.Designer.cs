@@ -9,8 +9,8 @@ using Projeto.Data;
 namespace Projeto.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200918203508_inity")]
-    partial class inity
+    [Migration("20200930054640_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -153,13 +153,17 @@ namespace Projeto.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cpf")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("char(11)")
+                        .HasMaxLength(11);
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("date");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("varchar(120)")
+                        .HasMaxLength(120);
 
                     b.HasKey("Id");
 

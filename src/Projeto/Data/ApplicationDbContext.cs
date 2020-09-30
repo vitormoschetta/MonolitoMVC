@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Flunt.Notifications;
+﻿using Flunt.Notifications;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Projeto.Data.Maps;
 using Projeto.Models;
 
 namespace Projeto.Data
@@ -20,6 +18,7 @@ namespace Projeto.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<Notification>();
+            modelBuilder.ApplyConfiguration(new ClienteMap());
             base.OnModelCreating(modelBuilder);
         }
 

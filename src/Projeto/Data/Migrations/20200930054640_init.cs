@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Projeto.Data.Migrations
 {
-    public partial class inity : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,9 +53,9 @@ namespace Projeto.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nome = table.Column<string>(nullable: true),
-                    DataNascimento = table.Column<DateTime>(nullable: true),
-                    Cpf = table.Column<string>(nullable: true)
+                    Nome = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "date", nullable: true),
+                    Cpf = table.Column<string>(type: "char(11)", maxLength: 11, nullable: false)
                 },
                 constraints: table =>
                 {
