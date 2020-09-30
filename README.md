@@ -4,7 +4,7 @@ Um monolito com práticas SOLID e cara de DDD.
 
 Modelo de domínio separado de modelo de apresentação. 
 
-Services, Resository, Validações de Domínio, Testes de unidade, AutoMapper, etc.
+Services, Resositories, Validações de Domínio, Testes de unidade, AutoMapper, etc.
 
 #### Flunt
 Validações de domínio com [Flunt](https://github.com/andrebaltieri/flunt) Validations.
@@ -13,16 +13,13 @@ Validações de domínio com [Flunt](https://github.com/andrebaltieri/flunt) Val
 Identity Core
 
 ### Persistência 
-Entity Framework
-
-### Leitura 
-Dapper
+ORM Entity Framework
 
 ### Formulários
 Bootstrap
 
 ### Validação no Cliente
-Além da validação de Domínio, aplicamos também validação rápida ainda no clinte, utilizando todo o poder das DataAnnotations e ModalState.
+Além da validação de Domínio, aplicamos também validação rápida ainda no clinte, utilizando todo o poder das DataAnnotations e ModelState.
 
 
 ![alt text](src/Projeto/wwwroot/images/01.jpg?raw=true=250x250 "Title")
