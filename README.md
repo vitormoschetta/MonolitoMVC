@@ -18,6 +18,7 @@ ORM Entity Framework
 ### Portabilidade
 Aplicação fácil de executar e compartilhar. 
 Portable DataBase SqLite.
+É só instalar o SDK .NET Core e executar.
 
 ### Formulários
 Bootstrap
