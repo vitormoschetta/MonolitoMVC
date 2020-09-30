@@ -15,6 +15,10 @@ Identity Core
 ### Persistência 
 ORM Entity Framework
 
+### Portabilidade
+Aplicação fácil de executar e compartilhar. 
+Portable DataBase SqLite.
+
 ### Formulários
 Bootstrap
 
