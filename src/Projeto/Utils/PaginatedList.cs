@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Projeto.Util
+namespace Projeto.Utils
 {
     // Recebe um tipo QUALQUER de objeto e retorna com paginação
     public class PaginatedList<T> : List<T>

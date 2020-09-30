@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
+using Projeto.Interfaces;
 using Projeto.Models;
-using Projeto.Repository.Interfaces;
-using Projeto.Util;
-using Projeto.ViewModels;
 
-namespace Projeto.Repository
+namespace Projeto.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {

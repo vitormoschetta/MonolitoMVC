@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Flunt.Notifications;
+using Projeto.Interfaces;
 using Projeto.Models;
-using Projeto.Repository.Interfaces;
-using Projeto.Util;
+using Projeto.Utils;
 using Projeto.ViewModels;
 
-namespace Projeto.Services
+namespace Projeto.Handlers
 {
-    public class ClienteService : Notifiable
+    public class ClienteHandler : Notifiable, IClienteHandler
     {
         private readonly IClienteRepository _repository;
         private readonly IMapper _mapper;
-        public ClienteService(IClienteRepository repository, IMapper mapper)
+        public ClienteHandler(IClienteRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -49,7 +49,7 @@ namespace Projeto.Services
         }
 
 
-        public ResultMessage Create(ClienteViewModel clienteViewModel)
+        public DataResult Create(ClienteViewModel clienteViewModel)
         {
 
             if (_repository.CpfExists(clienteViewModel.Cpf))
@@ -64,50 +64,56 @@ namespace Projeto.Services
 
             // Checa se existem notificações
             if (Invalid)
-                return new ResultMessage(false, "Não foi possível realizar o cadastro. ", Notifications, null);
+                return new DataResult(false, "Não foi possível realizar o cadastro. ", Notifications, null);
 
             // Salvar cliente no banco:     
             _repository.Create(cliente);
 
-            return new ResultMessage(true, "Cadastro realizado com sucesso. ", Notifications, cliente);
+            clienteViewModel = _mapper.Map<ClienteViewModel>(cliente);
+
+            return new DataResult(true, "Cadastro realizado com sucesso. ", Notifications, clienteViewModel);
         }
 
 
-        public ResultMessage Update(ClienteViewModel clienteViewModel)
+        public DataResult Update(ClienteViewModel clienteViewModel)
         {
             // Recupera o cliente (Rehidratação)
             var cliente = _repository.GetById(clienteViewModel.Id);
 
             // Valida e atualiza o objeto
-            cliente.Update(clienteViewModel.Nome, clienteViewModel.DataNascimento);
+            cliente.Update(clienteViewModel.Nome, clienteViewModel.DataNascimento, clienteViewModel.Cpf);
 
             // Agrupar as Validações
             AddNotifications(cliente);
 
             // Checa se existem notificações
             if (Invalid)
-                return new ResultMessage(false, "Não foi possível atualizar. ", Notifications, null);
+                return new DataResult(false, "Não foi possível atualizar. ", Notifications, null);
 
             // Salva no banco
             _repository.Update(cliente);
 
+            clienteViewModel = _mapper.Map<ClienteViewModel>(cliente);
+
             // Retornar informações : command result
-            return new ResultMessage(true, "Cadastro atualizado com sucesso. ", Notifications, null);
+            return new DataResult(true, "Cadastro atualizado com sucesso. ", Notifications, clienteViewModel);
         }
 
 
-        public ResultMessage Delete(Guid id)
+        public DataResult Delete(Guid id)
         {
             // Recupera o cliente (Rehidratação)
             var cliente = _repository.GetById(id);
             if (cliente == null)
-                return new ResultMessage(false, "Cliente não existe. ", Notifications, null);
+                return new DataResult(false, "Cliente não existe. ", Notifications, null);
 
             // Salva no banco
             _repository.Delete(cliente.Id);
 
+            var clienteViewModel = _mapper.Map<ClienteViewModel>(cliente);
+
             // Retornar informações : command result
-            return new ResultMessage(true, "Informações Excluídas. ", Notifications, cliente);
+            return new DataResult(true, "Informações Excluídas. ", Notifications, clienteViewModel);
         }
 
 

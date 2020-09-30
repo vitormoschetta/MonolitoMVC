@@ -1,34 +1,24 @@
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Projeto.Data;
-using Projeto.Models;
-using Dapper;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Projeto.Util;
 using System;
-using Projeto.Repository;
 using Projeto.ViewModels;
-using Projeto.Services;
+using Projeto.Handlers;
+using Projeto.Models;
+using Projeto.Utils;
 
 namespace Projeto.Controllers
 {
     public class ClienteController : Controller
     {
-        private readonly ClienteService _service;
-        public ClienteController(ClienteService service)
+        private readonly ClienteHandler _handler;
+        public ClienteController(ClienteHandler handler)
         {
-            _service = service;
+            _handler = handler;
         }
 
         public IActionResult Index(int? pageNumber)
         {
             if (pageNumber == null) pageNumber = 1;
-            var lista = _service.GetAll(pageNumber);
+            var lista = _handler.GetAll(pageNumber);
             return View(lista);
         }
 
@@ -40,25 +30,24 @@ namespace Projeto.Controllers
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var result = _service.Create(viewModel);
+            var result = _handler.Create(viewModel);
             if (result.Success == false)
             {
-                var notifications = result.Message;
-                foreach (var item in result.Data)
-                {
-                    notifications += $"{item.Message}. ";
-                }
+                var notifications = GroupsNotificationsInString(result);
                 ModelState.AddModelError(string.Empty, notifications);
                 return View(viewModel);
             }
-            return RedirectToAction("Index");
+
+            viewModel = (ClienteViewModel)result.Objeto;
+            TempDataUtil.Put(TempData, "viewModel", viewModel);
+            return RedirectToAction("Details", new { message = result.Message });
         }
 
 
 
         public IActionResult Edit(Guid id)
         {
-            var viewModel = _service.GetById(id);
+            var viewModel = _handler.GetById(id);
             return View(viewModel);
         }
 
@@ -68,18 +57,17 @@ namespace Projeto.Controllers
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var result = _service.Create(viewModel);
+            var result = _handler.Update(viewModel);
             if (result.Success == false)
             {
-                var notifications = result.Message;
-                foreach (var item in result.Data)
-                {
-                    notifications += $"{item.Message}. ";
-                }
+                var notifications = GroupsNotificationsInString(result);
                 ModelState.AddModelError(string.Empty, notifications);
                 return View(viewModel);
             }
-            return RedirectToAction("Index");
+
+            viewModel = (ClienteViewModel)result.Objeto;
+            TempDataUtil.Put(TempData, "viewModel", viewModel);
+            return RedirectToAction("Details", new { message = result.Message });
         }
 
 
@@ -87,29 +75,48 @@ namespace Projeto.Controllers
 
         public IActionResult Delete(Guid id)
         {
-            var viewModel = _service.GetById(id);
+            var viewModel = _handler.GetById(id);
             return View(viewModel);
         }
 
 
         [HttpPost]
-        public IActionResult DeleteConfirm(ClienteViewModel cliente)
+        public IActionResult Delete(ClienteViewModel viewModel)
         {
-            var commandResult = _service.Delete(cliente.Id);
-            if (commandResult.Success == false)
+            var result = _handler.Delete(viewModel.Id);
+            if (result.Success == false)
             {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-                return View(cliente);
+                var notifications = GroupsNotificationsInString(result);
+                ModelState.AddModelError(string.Empty, notifications);
+                return View(viewModel);
             }
 
             return RedirectToAction("Index");
         }
 
+        public IActionResult Details(string message)
+        {
+            ViewBag.Message = message;
+            var viewModel = TempData.Get<ClienteViewModel>("viewModel");
+            return View(viewModel);
+        }
 
-        public IActionResult Paginacao(int? pageNumber)
+
+        public string GroupsNotificationsInString(DataResult result)
+        {
+            var notifications = result.Message;
+            foreach (var item in result.Notifications)
+            {
+                notifications += $"{item.Message}. ";
+            }
+            return notifications;
+        }
+
+
+        public IActionResult Pagination(int? pageNumber)
         {
             if (pageNumber == null) pageNumber = 1;
-            var lista = _service.GetAll(pageNumber);
+            var lista = _handler.GetAll(pageNumber);
             return PartialView("_TabelaIndex", lista);
         }
 
@@ -117,7 +124,7 @@ namespace Projeto.Controllers
 
         public IActionResult Search(int? pageNumber, string parametro)
         {
-            var listaModelo = _service.Search(pageNumber, parametro);
+            var listaModelo = _handler.Search(pageNumber, parametro);
             return PartialView("_TabelaIndex", listaModelo);
         }
 

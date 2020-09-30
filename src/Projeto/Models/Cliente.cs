@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using Flunt.Validations;
 
 namespace Projeto.Models
@@ -11,6 +10,8 @@ namespace Projeto.Models
             Nome = nome;
             DataNascimento = dataNascimento;
             Cpf = cpf;
+
+            Validate();
         }
 
         public Cliente(Guid id, string nome, DateTime? dataNascimento, string cpf)
@@ -18,6 +19,8 @@ namespace Projeto.Models
             Nome = nome;
             DataNascimento = dataNascimento;
             Cpf = cpf;
+
+            Validate();
         }
 
         public string Nome { get; private set; }
@@ -25,10 +28,13 @@ namespace Projeto.Models
         public string Cpf { get; private set; }
 
 
-        public void Update(string nome, DateTime? dataNascimento)
+        public void Update(string nome, DateTime? dataNascimento, string cpf)
         {
             Nome = nome;
             DataNascimento = dataNascimento;
+            Cpf = cpf;
+
+            Validate();
         }
 
         public void Validate()

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Projeto.Models;
-using Projeto.Util;
+using Projeto.Utils;
 using Projeto.ViewModels;
 
-namespace Projeto.Repository.Interfaces
+namespace Projeto.Interfaces
 {
     public interface IClienteRepository
     {

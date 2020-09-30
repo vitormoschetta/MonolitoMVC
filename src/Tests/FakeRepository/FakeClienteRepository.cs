@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Projeto.Models;
-using Projeto.Repository.Interfaces;
-using Projeto.Util;
-using Projeto.ViewModels;
-
 namespace Tests.FakeRepository
 {
     // public class FakeClienteRepository : IClienteRepository

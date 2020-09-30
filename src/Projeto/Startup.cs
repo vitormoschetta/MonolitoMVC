@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Projeto.Models;
-using Projeto.Repository;
 using Projeto.ViewModels;
 using AutoMapper;
-using Projeto.Services;
-using Projeto.Repository.Interfaces;
+using Projeto.Handlers;
+using Projeto.Interfaces;
+using Projeto.Repositories;
 
 namespace Projeto
 {
@@ -46,7 +46,7 @@ namespace Projeto
             services.AddRazorPages();
 
             services.AddTransient<IClienteRepository, ClienteRepository>();
-            services.AddScoped<ClienteService>();
+            services.AddScoped<ClienteHandler>();
 
             services.Configure<IdentityOptions>(options =>
             {

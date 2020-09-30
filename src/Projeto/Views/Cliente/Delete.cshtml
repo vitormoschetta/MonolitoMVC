@@ -1,17 +1,31 @@
 @model Projeto.ViewModels.ClienteViewModel
 
+@{
+    DateTime DataNascimento = DateTime.Now;
+    var DataNascimentoString = string.Empty;
+
+    if(Model.DataNascimento != null) {
+        DataNascimento = Convert.ToDateTime(Model.DataNascimento);
+        DataNascimentoString = DataNascimento.ToString("dd/MM/yyyy");
+    }
+    else {
+        DataNascimentoString = string.Empty;
+    }
+}
+
 <div class="card">                   
   <div class="card-body"> 
 
-    <form asp-action="DeleteConfirm" method="POST">  
+    <form asp-action="Delete" method="POST">  
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>     
+
         <input type="hidden" asp-for="Id" />
 
-        <div class="row">
+       <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="bmd-label-floating">
-                        <b>Tem certeza que deseja Excluir?</b>
+                        <b style="color: red;">Tem certeza que deseja Excluir?</b>
                     </label>
                 </div>
             </div>
@@ -19,21 +33,21 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="bmd-label-floating">Nome</label>
-                    <input type="text" asp-for="Nome"  class="form-control" readonly/>                    
+                    <br/>@Model.Nome         
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="bmd-label-floating">CPF</label>
-                    <input type="text" asp-for="Cpf"  class="form-control" readonly/>                    
+                    <br/>@Model.Cpf               
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="bmd-label-floating">Data Nascimento</label>
-                    <input type="date" asp-for="DataNascimento"  class="form-control" readonly/>                    
+                    <br/>@DataNascimentoString         
                 </div>
-            </div>                   
+            </div>                         
         </div>
         <div class="row" style="float: right;">
             <input type="submit" value="Delete" class="btn btn-danger" /> 
