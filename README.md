@@ -55,9 +55,9 @@ Abra a seguinte url:
 [https://localhost:5001](https://localhost:5001) 
 
 
-Acesse o painel administrativo:
-Email: admin@gmail.com
-Senha: 123456
+Acesse o painel administrativo:  
+Email: admin@gmail.com  
+Senha: 123456  
 
 
 
