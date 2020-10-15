@@ -1,7 +1,7 @@
 ﻿
 
-function Create(rota) {
-    $.get(rota, function (data) {
+function Create(url) {
+    $.get(url, function (data) {
         $("#carrega-modal").html(data);
         $('#modalCreate').modal('show');
     });
@@ -47,29 +47,8 @@ function Pagination(pageNumber, url) {
 
 
 
-function Details(params, rota) {
-
-    var url = $("#" + rota).data("url");
-
-    $.get(url, { id: params }, function (data) {
-        $("#carrega-modal").html(data);
-        $('#modalDetails').modal('show');
-    });
-
-}
 
 
-
-
-function Perfis(params, rota) {
-
-    var url = $("#" + rota).data("url");
-
-    $.get(url, { id: params }, function (data) {
-        $("#carrega-modal").html(data);
-        $('#modalPerfis').modal('show');
-    });
-}
 
 
 function BuscaDinamica(texto, rota, params) {

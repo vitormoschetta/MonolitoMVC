@@ -1,11 +1,13 @@
 @model IEnumerable<Projeto.Models.Usuario>
 
+
+
 <!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
-<table class="table table-hover table-sm">   
-    <thead>     
-        <tr>         
+<table class="table table-hover table-sm">
+    <thead>
+        <tr>
             <th>Email</th>
-            <th>Status</th>    
+            <th>Status</th>
             <th></th>
         </tr>
     </thead>
@@ -14,31 +16,27 @@
 
         @foreach (var item in Model)
         {
-                    
+
             // ==================================== LINHA CORPO DA TABELA ===========================================-->
-            <tr>             
+            <tr>
                 <td>@item.Email</td>
                 <td>@item.Status </td>
                 <td>
-                    <a  style="margin-right: 2em;" href="#" id="btn-details-usuario" data-url="@Url.Action("Details","Usuario")" onclick="Details('@item.Id', 'btn-details-usuario')" style="color:green">
-                        <i class="fa fa-info-circle fa-lg" style="color: #17A2B8;"></i>
-                    </a>                     
+                    <a href="@Url.Action("Edit","Usuario", new { id = @item.Id } )" style="margin-right: 2em;">
+                        <i class="fa fa-edit fa-lg" style="color: ##1D9C73;"></i>
+                    </a>
 
-                    <a  style="margin-right: 2em;" href="#" id="btn-edit-usuario" data-url="@Url.Action("Edit","Usuario")" onclick="Edit('@item.Id','btn-edit-usuario')">
-                        <i class="fa fa-edit fa-lg" style="color: #17A2B8;"></i>                    
-                    </a> 
-
-                    <a  style="margin-right: 2em;" href="#" id="btn-delete-usuario" data-url="@Url.Action("Delete","Usuario")" onclick="Delete('@item.Id', 'btn-delete-usuario')" style="color:red">
+                    <a href="@Url.Action("Delete","Usuario", new { id = @item.Id } )">
                         <i class="fa fa-trash fa-lg" style="color: #AD3E48;"></i>
-                    </a>       
+                    </a>
 
-                    <a  style="margin-right: 2em;" href="#" id="btn-perfis-usuario" data-url="@Url.Action("Perfis","Usuario")" onclick="Perfis('@item.Id', 'btn-perfis-usuario')" style="color:green">
+                    <a href="#" style="margin-left: 2em;" onclick="Perfis('@item.Id', 'btn-perfis-usuario')"
+                    style="color:green">
                         Perfil
-                    </a>           
+                    </a>
                 </td>
             </tr>
         }
-    
+
     </tbody>
 </table>
-

@@ -6,6 +6,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Perfis</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
 
       </div>
       <div class="modal-body">
@@ -46,12 +49,7 @@
             @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
         }
 
-        </div>
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal"  style="background-color:white; border: none;">
-              <i class="fa fa-window-close-o fa-4x" aria-hidden="true"></i>
-            </button>
-        </div>
+        </div>       
     </div>
   </div>
 </div>

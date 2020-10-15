@@ -11,7 +11,7 @@ using Projeto.Models;
 
 namespace Projeto.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsuarioController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -33,30 +33,12 @@ namespace Projeto.Controllers
             return View(listaModelo);
         }
 
-        // public IActionResult Create()
-        // {           
-        //     Usuario modelo = new Usuario();
-        //     return PartialView("_Create", modelo);            
-        // }
-
-
-
-        // [HttpPost]
-        // public async Task<IActionResult> Create(Usuario modelo)
-        // {
-        //     modelo.EmailConfirmed = true;
-        //     _context.Add(modelo);
-        //     await _context.SaveChangesAsync();
-        //     return RedirectToAction("Index");
-        // }
-
-
 
         public async Task<IActionResult> Edit(string id)
         {
             var modelo = await _context.Usuario.SingleAsync(x => x.Id == id);
             ViewBag.Perfis = _roleManager.Roles;
-            return PartialView("_Edit", modelo);
+            return View(modelo);
         }
 
 
@@ -101,7 +83,7 @@ namespace Projeto.Controllers
             var modelo = await _context.Usuario.SingleAsync(x => x.Id == id);
             if (modelo == null) return NotFound();
 
-            return PartialView("_Delete", modelo);
+            return View(modelo);
         }
 
 
@@ -116,28 +98,17 @@ namespace Projeto.Controllers
 
 
 
-        public async Task<IActionResult> Details(string id)
-        {
-            var modelo = await _context.Usuario.SingleAsync(m => m.Id == id);
-
-            if (modelo == null) return NotFound();
-
-            return PartialView("_Details", modelo);
-        }
-
-        
-
         private bool ModelExist(string id)
         {
-           return _context.Usuario.Any(x => x.Id == id);
+            return _context.Usuario.Any(x => x.Id == id);
         }
 
 
         public async Task<IActionResult> Perfis(string id)
-        {   
-            var Roles = _roleManager.Roles;                     
+        {
+            var Roles = _roleManager.Roles;
 
-            var modelo = await _context.Usuario.SingleAsync(m => m.Id == id);                        
+            var modelo = await _context.Usuario.SingleAsync(m => m.Id == id);
             ViewBag.PerfilUsuario = await _userManager.GetRolesAsync(modelo);
             ViewBag.UsuarioId = modelo.Id;
 
@@ -150,33 +121,37 @@ namespace Projeto.Controllers
             var usuario = _userManager.FindByIdAsync(usuarioId).Result;
             IdentityResult result;
 
-            if (acao == "adicionar"){
+            if (acao == "adicionar")
+            {
                 result = _userManager.AddToRoleAsync(usuario, roleName).Result;
-                usuario.Perfil = roleName;                
-            }                
-            else {
+                usuario.Perfil = roleName;
+            }
+            else
+            {
                 result = _userManager.RemoveFromRoleAsync(usuario, roleName).Result;
-                
+
                 var roles = _userManager.GetRolesAsync(usuario).Result;
-                if (roles != null){
+                if (roles != null)
+                {
                     for (int i = 0; i < 1; i++)
                     {
                         usuario.Perfil = roles[i];
                     }
                 }
-                else{
+                else
+                {
                     usuario.Perfil = string.Empty;
                 }
-                
+
             }
 
             _context.Update(usuario);
             _context.SaveChangesAsync();
-                
+
 
             if (!result.Succeeded) Errors(result);
 
-        }   
+        }
 
 
         private void Errors(IdentityResult result)
@@ -186,30 +161,5 @@ namespace Projeto.Controllers
         }
 
 
-
-        // [HttpPost]
-        // public async Task<IActionResult> EditPerfil(string id, Usuario modelo)
-        // {   
-        //     var user = _context.Usuario.FirstOrDefault(x => x.Id == modelo.Id);
-
-        //     if (user == null) return NotFound();
-
-        //     var result = await _userManager.AddToRoleAsync(user, modelo.Perfil);
-
-        //     if (!result.Succeeded) Errors(result);
-
-        //     return RedirectToAction("Index");
-        // }
-
-
-
-       
-
-
-        // private void Errors(IdentityResult result)
-        // {
-        //     foreach (IdentityError error in result.Errors)
-        //         ModelState.AddModelError("", error.Description);
-        // }
     }
 }

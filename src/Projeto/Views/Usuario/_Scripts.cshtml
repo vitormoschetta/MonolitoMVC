@@ -1,22 +1,28 @@
 <script>
-      
-    function UpdateRole(role, usuario, rota){
-        
 
-        var acao = "adicionar";
-        if (document.getElementById(role).checked == false)    
-            acao = "remover";
-        
-        var url = $("#"+rota).data("url");  
+    function Perfis(parametro) {
+    var url = '@Url.Action("Perfis","Usuario")';
+    $.get(url, { id: parametro }, function (data) {
+    $("#carrega-modal").html(data);
+    $('#modalPerfis').modal('show');
+    });
+    }
 
-        $.get(url, {usuarioId:usuario, roleName:role, acao:acao}, function (data)
-        {
-            alert("Perfil Atualizado");
-        })
-        .fail(function() {
-            alert( "Não foi possível atualizar o perfil." );
-        });      
-        
+
+    function UpdateRole(role, usuario, rota) {
+    var acao = "adicionar";
+    if (document.getElementById(role).checked == false)
+    acao = "remover";
+
+    var url = $("#" + rota).data("url");
+
+    $.get(url, { usuarioId: usuario, roleName: role, acao: acao }, function (data) {
+    alert("Perfil Atualizado");
+    })
+    .fail(function () {
+    alert("Não foi possível atualizar o perfil.");
+    });
+
     }
 
 </script>
