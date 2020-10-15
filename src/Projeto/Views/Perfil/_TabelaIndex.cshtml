@@ -2,33 +2,43 @@
 @model IEnumerable<IdentityRole>
 
 <style>
-    .table-hover thead tr:hover th, .table-hover tbody tr:hover td {
+    .table-hover thead tr:hover th,
+    .table-hover tbody tr:hover td {
     background-color: #DAE0E5;
-}
+    }
 </style>
 
 <!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
-<table class="table table-hover table-sm">   
-    <thead>     
+<table class="table table-hover table-sm">
+    <thead>
         <tr>
-            <th>Nome</th>           
+            <th>Nome</th>
+            <th></th>
         </tr>
     </thead>
 
     <tbody>
 
         @foreach (var item in Model)
+
         {
-                    
+
             // ==================================== LINHA CORPO DA TABELA ===========================================-->
-            <tr style="cursor: pointer" onclick="Edit('@item.Id','btn-edit-perfil')" id="btn-edit-perfil" data-url="@Url.Action("Edit","Perfil")">
-                <td>@item.Name</td>                    
-             
+            <tr style="cursor: pointer" onclick="Edit('@item.Id','btn-edit-perfil')" id="btn-edit-perfil"
+            data-url="@Url.Action("Edit","Perfil")">
+                <td>@item.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit","Perfil", new { id = @item.Id } )" style="margin-right: 2em;">
+                        <i class="fa fa-edit fa-lg" style="color: ##1D9C73;"></i>
+                    </a>
+
+                    <a href="@Url.Action("Delete","Perfil", new { id = @item.Id } )">
+                        <i class="fa fa-trash fa-lg" style="color: #AD3E48;"></i>
+                    </a>
+                </td>
             </tr>
+
         }
-    
+
     </tbody>
 </table>
-
-
-

@@ -1,10 +1,24 @@
+<div class="col-md-12">
+
+    <a href="@Url.Action("Create","Perfil")" class="btn" style="float:left; background:#00BCD4">
+        <i class="fa fa-plus fa-3x"></i> PERFIL
+    </a>
+
+    <div class="input-group col-md-3" style="float: right;">
+        <input type="text" id="search" class="form-control py-2" onkeyup="ProcurarPerfil(this.value)">
+        <i class="fa fa-search fa-2x" style="color: #00BCD4;"></i>
+    </div>
 
 
-<div class="navbar-right" id="btn-create-perfil" data-url="@Url.Action("Create","Perfil")">
-    <button onclick="Create('btn-create-perfil')" style="background-color:white; border: none;">
-        <i class="fa fa-plus-square-o fa-4x" style="color: #17A2B8; text-align:right"></i>
-    </button>    
+    <div class="card">
+        <div class="card-body">
+            <div id="tabela-index">
+                <partial name="_TabelaIndex" />
+            </div>
+        </div>
+    </div>
 </div>
+
 
 
 
@@ -12,11 +26,4 @@
 <div id="carrega-modal"></div>
 
 
-<div id="tabela-index">
-    @await Html.PartialAsync("_TabelaIndex")
-</div>
-
-
-
-
-
+<partial name="_Scripts" />

@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Projeto.Models;
 
 namespace Projeto.Controllers
-{    
-    public class PerfilController: Controller
+{
+    public class PerfilController : Controller
     {
         private RoleManager<IdentityRole> _roleManager;
 
@@ -16,22 +16,26 @@ namespace Projeto.Controllers
             _roleManager = roleManager;
         }
 
-        public ViewResult Index() => View(_roleManager.Roles);
-
-        public IActionResult Create()
+        public ViewResult Index()
         {
-            IdentityRole role = new IdentityRole();
-            return PartialView("_Create", role);
+            var roles = _roleManager.Roles;
+            return View(roles);
         }
 
+
+        public IActionResult Create() => View();
+
         [HttpPost]
-        public async Task<IActionResult> Create([Required]string name)
+        public async Task<IActionResult> Create([Required] string name)
         {
             if (ModelState.IsValid)
             {
                 var result = await _roleManager.CreateAsync(new IdentityRole(name));
                 if (result.Succeeded)
+                {
+                    //Serilog.Log.Information("Ação: Create; Objeto: Perfil; Perfil: {0}; Usuario: {1}; ", name, User.Identity.Name);
                     return RedirectToAction("Index");
+                }
                 else
                     Errors(result);
             }
@@ -49,7 +53,7 @@ namespace Projeto.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var modelo = await _roleManager.FindByIdAsync(id);
-            return PartialView("_Edit", modelo);
+            return View(modelo);
         }
 
 
@@ -59,10 +63,11 @@ namespace Projeto.Controllers
             if (id != modelo.Id) return NotFound();
 
             if (!ModelState.IsValid) return NotFound();
-            
+
             try
             {
                 await _roleManager.UpdateAsync(modelo);
+                //Serilog.Log.Information("Ação: Update; Objeto: Perfil; Perfil: {0}; Usuario: {1}; ", modelo.Name, User.Identity.Name);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,7 +87,7 @@ namespace Projeto.Controllers
             var modelo = await _roleManager.FindByIdAsync(id);
             if (modelo == null) return NotFound();
 
-            return PartialView("_Delete", modelo);
+            return View(modelo);
         }
 
 
@@ -94,7 +99,10 @@ namespace Projeto.Controllers
             {
                 var result = await _roleManager.DeleteAsync(modelo);
                 if (result.Succeeded)
+                {
+                    //Serilog.Log.Information("Ação: Delete; Objeto: Perfil; Perfil: {0}; Usuario: {1}; ", modelo.Name, User.Identity.Name);
                     return RedirectToAction("Index");
+                }
                 else
                     Errors(result);
             }
@@ -113,7 +121,7 @@ namespace Projeto.Controllers
 
             if (modelo == null) return NotFound();
 
-            return PartialView("_Details", modelo);
+            return View(modelo);
         }
 
 
@@ -124,7 +132,7 @@ namespace Projeto.Controllers
             return await _roleManager.RoleExistsAsync(modelo.Name);
         }
 
-       
+
 
     }
 }

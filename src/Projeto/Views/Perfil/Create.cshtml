@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+<div class="card">
+    <div class="card-body">
+
+        <form asp-action="Create" method="POST">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">
+                            <b>Cadastro de Perfil</b>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Nome Perfil</label>
+                        <input type="text" asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="float: right;">
+                <input type="submit" value="Concluir" class="btn btn-info" />
+                <a href="@Url.Action("Index","Perfil")" class="btn btn-secondary">Fechar</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<partial name="_ValidationScriptsPartial" />
