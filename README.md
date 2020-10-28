@@ -31,8 +31,13 @@ Além da validação de Domínio, aplicamos também validação rápida ainda no
 ![alt text](src/Projeto/wwwroot/images/04.jpg?raw=true=250x250 "Title")
 
 
+### Acessar Aplicação 
+Esta aplicação está hospedada no Heroku:
 
-### Executar
+https://vitor-monolito-mvc.herokuapp.com/
+
+
+### Executar Aplicação em Máquina Local
 Como estamos utilizando o Banco de Dados portátil SqLite, já populado com dados, fica muito fácil ver a aplicação funcionando com pouquíssimo esforço. Siga as orientações abaixo.
 
 Se ainda não possui o .NET Core SDK instalado, segue o [link](https://docs.microsoft.com/pt-br/dotnet/core/install/windows?tabs=netcore31) de suporte a instalação.
